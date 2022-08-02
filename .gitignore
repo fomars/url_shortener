@@ -1,0 +1,9 @@
+.idea/
+.venv/
+dist/
+sdist/
+wheels/
+var/
+lib/
+*.egg-info/
+.env

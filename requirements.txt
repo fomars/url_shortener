@@ -1,0 +1,4 @@
+fastapi~=0.79
+uvicorn[standard]~=0.18
+aioredis~=2.0
+validators~=0.11
