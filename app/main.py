@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, BackgroundTasks
 import aioredis
 from base64 import urlsafe_b64encode
 from hashlib import md5
@@ -22,7 +22,7 @@ def root():
     return {"message": "URL shortener app"}
 
 
-@app.post("/url", response_model=URLShort)
+@app.post("/urls", response_model=URLShort)
 async def create_short_url(url: URLBase):
     salt = 0
     # loop to avoid collisions:
@@ -37,3 +37,28 @@ async def create_short_url(url: URLBase):
         else:
             break
     return URLShort.from_key(key)
+
+
+async def incr_count(key):
+    await redis.hincrby(key, 'count', 1)
+
+
+@app.get("/{key}", response_model=URLBase)
+async def get_full_url(key: str, background_tasks: BackgroundTasks):
+
+    url_db_data = await redis.hgetall(key)
+    if not url_db_data:
+        raise HTTPException(status_code=404, detail="URL not found")
+    else:
+        background_tasks.add_task(incr_count, key)
+        return URLBase(target_url=url_db_data['target_url'])
+
+
+@app.get("/urls/{key}", response_model=URLStore)
+async def get_url_stats(key: str, background_tasks: BackgroundTasks):
+
+    url_db_data = await redis.hgetall(key)
+    if not url_db_data:
+        raise HTTPException(status_code=404, detail="URL not found")
+    else:
+        return URLStore.parse_obj(url_db_data)

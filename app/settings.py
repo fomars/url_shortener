@@ -11,8 +11,7 @@ class ServerSettings(Settings):
     host: str = "127.0.0.1"
     port: int = 8000
     log_level: str = "info"
-    debug: bool = False
-    reload: bool = False
+    scheme: str = 'http'
 
 
 class AppSettings(Settings):
