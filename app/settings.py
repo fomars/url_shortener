@@ -17,12 +17,17 @@ class ServerSettings(Settings):
 
 class AppSettings(Settings):
     app_version: str = "local"
+    app_domain: str = "tier.app"
 
 
 class RedisSettings(Settings):
     redis_host: str = "127.0.0.1"
     redis_port: int = 6379
     redis_db: int = 0
+
+    @property
+    def redis_url(self) -> str:
+        return f"redis://{self.redis_host}:{self.redis_port}"
 
 
 server_settings = ServerSettings()
