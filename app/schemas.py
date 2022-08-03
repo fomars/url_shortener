@@ -8,7 +8,8 @@ class URLBase(BaseModel):
     target_url: str
 
     @validator("target_url")
-    def assert_url_valid(cls, v):
+    def assert_url_valid(cls, v: str) -> str:
+        v = v.strip()
         if not validators.url(v):
             raise ValueError("Please send a valid URL")
         return v
