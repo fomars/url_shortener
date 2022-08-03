@@ -20,7 +20,7 @@ class URLShort(BaseModel):
 
     @classmethod
     def from_key(cls, key: str):
-        return cls(url=f"{server_settings.scheme}://{app_settings.app_domain}:{server_settings.port}/{key}")
+        return cls(url=f"{server_settings.scheme}://{server_settings.host}:{server_settings.port}/{key}")
 
 
 class URLStore(URLBase):

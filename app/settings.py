@@ -8,15 +8,13 @@ class Settings(BaseSettings):
 
 
 class ServerSettings(Settings):
-    host: str = "127.0.0.1"
+    host: str = "tier.app"
     port: int = 8000
-    log_level: str = "info"
     scheme: str = 'http'
 
 
 class AppSettings(Settings):
     app_version: str = "local"
-    app_domain: str = "tier.app"
 
 
 class RedisSettings(Settings):
